@@ -1,6 +1,6 @@
 create schema inventory collate utf8mb3_general_ci;
 
-create table categories
+create table inventory.categories
 (
     id          int auto_increment,
     title       varchar(200) not null,
@@ -9,7 +9,7 @@ create table categories
             primary key (id)
 );
 
-create table locations
+create table inventory.locations
 (
     id          int auto_increment,
     title       varchar(200) not null,
@@ -18,7 +18,7 @@ create table locations
             primary key (id)
 );
 
-create table records
+create table inventory.records
 (
     id          int auto_increment,
     category_id int          not null,
