@@ -34,3 +34,9 @@ create table inventory.records
     constraint records_locations_id_fk
         foreign key (location_id) references locations (id)
 );
+
+insert into inventory.categories (title, description) values ('Furniture', 'Office furniture'), ('Computer equipment', 'Laptops and supplies');
+
+insert into inventory.locations (title, description) values ('Development', 'Developers room'), ('Product Development', 'PMs room');
+
+insert into inventory.records (category_id, location_id, title, description, registered_at) values (1, 1, 'Chair', 'Chair for developers room', '2023-01-01 15:00:00'), (2, 2, 'MacBook', 'MacBook for PMs room', '2023-01-01 15:10:00');
