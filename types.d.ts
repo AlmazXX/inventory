@@ -17,4 +17,5 @@ export interface Record {
     title: string;
     description: string;
     image: string | null;
+    registered_at: string;
 }
