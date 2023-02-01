@@ -1,21 +1,30 @@
 export interface Category {
-    id: number;
     title: string;
     description: string;
+}
+
+export interface ApiCategory extends Category {
+    id: number;
 }
 
 export interface Location {
-    id: number;
     title: string;
     description: string;
 }
 
-export interface Record {
+export interface ApiLocation extends Location {
     id: number;
+}
+
+export interface Record {
+    title: string;
     category_id: number;
     location_id: number;
-    title: string;
     description: string;
     image: string | null;
-    registered_at: string;
+    registered_at: Date;
+}
+
+export interface ApiRecord extends Record {
+    id: number;
 }
