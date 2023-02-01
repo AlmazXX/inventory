@@ -8,14 +8,14 @@ const categoriesRouter = Router();
 categoriesRouter.get('/', async (req, res) => {
     const connection = mysqlDb.getConnection();
     const query = await connection.query('SELECT id, title FROM categories');
-    const categories = query[0] as ApiCategory[]
+    const categories = query[0] as ApiCategory[];
     res.send(categories);
 });
 
 categoriesRouter.get('/:id', async (req, res) => {
     const connection = mysqlDb.getConnection();
     const query = await connection.query('SELECT * FROM categories WHERE id = ?', [req.params.id]);
-    const [category] = query[0] as ApiCategory[]
+    const [category] = query[0] as ApiCategory[];
     if (!category) {
         return res.status(404).send({error: 'Not found'})
     }
@@ -41,7 +41,13 @@ categoriesRouter.post('/', async (req, res) => {
 
 categoriesRouter.delete('/:id', async (req, res) => {
     const connection = mysqlDb.getConnection();
-    await connection.query('DELETE FROM categories WHERE id = ?', [req.params.id])
+    const query = await connection.query('SELECT * FROM records WHERE category_id = ?', [req.params.id]);
+    const [category] = query[0] as ApiCategory[];
+
+    if (category) {
+        return res.status(404).send({error: 'Cannot delete a parent row'});
+    }
+    await connection.query('DELETE FROM categories WHERE id = ?', [req.params.id]);
     res.send('The category is deleted');
 });
 
