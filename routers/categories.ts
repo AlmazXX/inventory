@@ -1,6 +1,6 @@
 import {Router} from "express";
 import mysqlDb from "../mysqlDb";
-import {Category} from "../types";
+import {ApiCategory, Category} from "../types";
 import {OkPacket} from "mysql2";
 
 const categoriesRouter = Router();
@@ -8,14 +8,14 @@ const categoriesRouter = Router();
 categoriesRouter.get('/', async (req, res) => {
     const connection = mysqlDb.getConnection();
     const query = await connection.query('SELECT * FROM categories');
-    const categories = query[0] as Category[]
+    const categories = query[0] as ApiCategory[]
     res.send(categories);
 });
 
 categoriesRouter.get('/:id', async (req, res) => {
     const connection = mysqlDb.getConnection();
     const query = await connection.query('SELECT * FROM categories WHERE id = ?', [req.params.id]);
-    const categories = query[0] as Category[]
+    const categories = query[0] as ApiCategory[]
     const category = categories[0]
     if (!category) {
         return res.status(404).send({error: 'Not found'})
@@ -28,7 +28,7 @@ categoriesRouter.post('/', async (req, res) => {
         return res.status(404).send({error: 'Field "Title" is required'})
     }
 
-    const categoryData = {
+    const categoryData: Category = {
         title: req.body.title,
         description: req.body.description,
     }
