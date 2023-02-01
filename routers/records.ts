@@ -8,7 +8,7 @@ const recordsRouter = Router();
 
 recordsRouter.get('/', async (req, res) => {
     const connection = mysqlDb.getConnection();
-    const query = await connection.query('SELECT * FROM records');
+    const query = await connection.query('SELECT id, title, category_id, location_id FROM records');
     const records = query[0] as ApiRecord[];
     res.send(records)
 });
@@ -16,8 +16,7 @@ recordsRouter.get('/', async (req, res) => {
 recordsRouter.get('/:id',async (req, res) => {
     const connection = mysqlDb.getConnection();
     const query = await connection.query('SELECT * FROM records WHERE id = ?', [req.params.id]);
-    const records = query[0] as ApiRecord[];
-    const record = records[0];
+    const [record] = query[0] as ApiRecord[];
     if (!record) {
         return res.status(404).send({error: 'Not found'})
     }
