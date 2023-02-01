@@ -41,6 +41,12 @@ locationsRouter.post('/', async (req, res) => {
 
 locationsRouter.delete('/:id', async (req, res) => {
     const connection = mysqlDb.getConnection();
+    const query = await connection.query('SELECT * FROM records WHERE location_id = ?', [req.params.id]);
+    const [location] = query[0] as ApiLocation[];
+
+    if (location) {
+        return res.status(404).send({error: 'Cannot delete a parent row '})
+    }
     await connection.query('DELETE FROM locations WHERE id = ?', [req.params.id])
     res.send('The location is deleted');
 });
