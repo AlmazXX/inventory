@@ -1,6 +1,6 @@
-create schema inventory collate utf8mb3_general_ci;
+CREATE SCHEMA inventory COLLATE utf8mb3_general_ci;
 
-create table inventory.categories
+CREATE TABLE inventory.categories
 (
     id          int auto_increment,
     title       varchar(200) not null,
@@ -9,7 +9,7 @@ create table inventory.categories
             primary key (id)
 );
 
-create table inventory.locations
+CREATE TABLE inventory.locations
 (
     id          int auto_increment,
     title       varchar(200) not null,
@@ -18,7 +18,7 @@ create table inventory.locations
             primary key (id)
 );
 
-create table inventory.records
+CREATE TABLE inventory.records
 (
     id          int auto_increment,
     category_id int          not null,
@@ -35,8 +35,8 @@ create table inventory.records
         foreign key (location_id) references locations (id)
 );
 
-insert into inventory.categories (title, description) values ('Furniture', 'Office furniture'), ('Computer equipment', 'Laptops and supplies');
+INSERT INTO inventory.categories (title, description) VALUES ('Furniture', 'Office furniture'), ('Computer equipment', 'Laptops and supplies');
 
-insert into inventory.locations (title, description) values ('Development', 'Developers room'), ('Product Development', 'PMs room');
+INSERT INTO inventory.locations (title, description) VALUES ('Development', 'Developers room'), ('Product Development', 'PMs room');
 
-insert into inventory.records (category_id, location_id, title, description, registered_at) values (1, 1, 'Chair', 'Chair for developers room', '2023-01-01 15:00:00'), (2, 2, 'MacBook', 'MacBook for PMs room', '2023-01-01 15:10:00');
+INSERT INTO inventory.records (category_id, location_id, title, description, registered_at) VALUES (1, 1, 'Chair', 'Chair for developers room', '2023-01-01 15:00:00'), (2, 2, 'MacBook', 'MacBook for PMs room', '2023-01-01 15:10:00');
