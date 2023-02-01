@@ -1,54 +1,66 @@
-import {Router} from "express";
+import { Router } from "express";
+import { OkPacket } from "mysql2";
 import mysqlDb from "../mysqlDb";
-import {ApiCategory, Category} from "../types";
-import {OkPacket} from "mysql2";
+import { ApiCategory, Category } from "../types";
 
 const categoriesRouter = Router();
 
-categoriesRouter.get('/', async (req, res) => {
-    const connection = mysqlDb.getConnection();
-    const query = await connection.query('SELECT id, title FROM categories');
-    const categories = query[0] as ApiCategory[];
-    res.send(categories);
+categoriesRouter.get("/", async (req, res) => {
+  const connection = mysqlDb.getConnection();
+  const query = await connection.query("SELECT id, title FROM categories");
+  const categories = query[0] as ApiCategory[];
+  res.send(categories);
 });
 
-categoriesRouter.get('/:id', async (req, res) => {
-    const connection = mysqlDb.getConnection();
-    const query = await connection.query('SELECT * FROM categories WHERE id = ?', [req.params.id]);
-    const [category] = query[0] as ApiCategory[];
-    if (!category) {
-        return res.status(404).send({error: 'Not found'})
-    }
-    res.send(category);
+categoriesRouter.get("/:id", async (req, res) => {
+  const connection = mysqlDb.getConnection();
+  const query = await connection.query(
+    "SELECT * FROM categories WHERE id = ?",
+    [req.params.id]
+  );
+  const [category] = query[0] as ApiCategory[];
+
+  if (!category) {
+    return res.status(404).send({ error: "Not found" });
+  }
+  res.send(category);
 });
 
-categoriesRouter.post('/', async (req, res) => {
-    if (!req.body.title) {
-        return res.status(404).send({error: 'Field "Title" is required'})
-    }
+categoriesRouter.post("/", async (req, res) => {
+  if (!req.body.title) {
+    return res.status(404).send({ error: 'Field "Title" is required' });
+  }
 
-    const categoryData: Category = {
-        title: req.body.title,
-        description: req.body.description,
-    }
+  const categoryData: Category = {
+    title: req.body.title,
+    description: req.body.description,
+  };
 
-    const connection = mysqlDb.getConnection();
-    const query = await connection.query('INSERT INTO categories (title, description) VALUES (?, ?)', [categoryData.title, categoryData.description]);
-    const info = query[0] as OkPacket;
+  const connection = mysqlDb.getConnection();
+  const query = await connection.query(
+    "INSERT INTO categories (title, description) VALUES (?, ?)",
+    [categoryData.title, categoryData.description]
+  );
+  const info = query[0] as OkPacket;
 
-    res.send({...categoryData, id: info.insertId});
+  res.send({ ...categoryData, id: info.insertId });
 });
 
-categoriesRouter.delete('/:id', async (req, res) => {
-    const connection = mysqlDb.getConnection();
-    const query = await connection.query('SELECT * FROM records WHERE category_id = ?', [req.params.id]);
-    const [category] = query[0] as ApiCategory[];
+categoriesRouter.delete("/:id", async (req, res) => {
+  const connection = mysqlDb.getConnection();
+  const query = await connection.query(
+    "SELECT * FROM records WHERE category_id = ?",
+    [req.params.id]
+  );
+  const [category] = query[0] as ApiCategory[];
 
-    if (category) {
-        return res.status(404).send({error: 'Cannot delete a parent row'});
-    }
-    await connection.query('DELETE FROM categories WHERE id = ?', [req.params.id]);
-    res.send('The category is deleted');
+  if (category) {
+    return res.status(404).send({ error: "Cannot delete a parent row" });
+  }
+  await connection.query("DELETE FROM categories WHERE id = ?", [
+    req.params.id,
+  ]);
+  res.send("The category is deleted");
 });
 
 export default categoriesRouter;
