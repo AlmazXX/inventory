@@ -9,11 +9,11 @@ const app = express();
 const port = 8000;
 
 app.use(cors());
+app.use(express.json());
 app.use(express.static("public"));
 app.use('/categories', categoriesRouter);
 app.use('/locations', locationsRouter);
 app.use('/records', recordsRouter);
-app.use(express.json());
 
 const run = async () => {
   await mysqlDb.init();
