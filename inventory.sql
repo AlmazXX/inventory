@@ -20,13 +20,13 @@ CREATE TABLE inventory.locations
 
 CREATE TABLE inventory.records
 (
-    id          int auto_increment,
-    category_id int          not null,
-    location_id int          not null,
-    title       varchar(200) not null,
-    description text         not null,
-    image       varchar(100) null,
-    registered_at datetime default now() not null,
+    id            int auto_increment,
+    category_id   int          not null,
+    location_id   int          not null,
+    title         varchar(200) not null,
+    description   text         not null,
+    image         varchar(100) null,
+    registered_at datetime     not null,
     constraint records_pk
         primary key (id),
     constraint records_categories_id_fk
