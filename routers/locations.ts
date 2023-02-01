@@ -1,6 +1,6 @@
 import {Router} from "express";
 import mysqlDb from "../mysqlDb";
-import {Category, Location} from "../types";
+import {ApiLocation, Location} from "../types";
 import {OkPacket} from "mysql2";
 
 const locationsRouter = Router();
@@ -8,14 +8,14 @@ const locationsRouter = Router();
 locationsRouter.get('/', async (req, res) => {
     const connection = mysqlDb.getConnection();
     const query = await connection.query('SELECT * FROM locations');
-    const locations = query[0] as Location[]
+    const locations = query[0] as ApiLocation[]
     res.send(locations);
 });
 
 locationsRouter.get('/:id', async (req, res) => {
     const connection = mysqlDb.getConnection();
     const query = await connection.query('SELECT * FROM locations WHERE id = ?', [req.params.id]);
-    const locations = query[0] as Category[]
+    const locations = query[0] as ApiLocation[]
     const location = locations[0]
     if (!location) {
         return res.status(404).send({error: 'Not found'})
@@ -28,7 +28,7 @@ locationsRouter.post('/', async (req, res) => {
         return res.status(404).send({error: 'Field "Title" is required'})
     }
 
-    const locationData = {
+    const locationData: Location = {
         title: req.body.title,
         description: req.body.description,
     }
