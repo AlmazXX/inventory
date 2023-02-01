@@ -7,7 +7,7 @@ const locationsRouter = Router();
 
 locationsRouter.get('/', async (req, res) => {
     const connection = mysqlDb.getConnection();
-    const query = await connection.query('SELECT * FROM locations');
+    const query = await connection.query('SELECT id, title FROM locations');
     const locations = query[0] as ApiLocation[]
     res.send(locations);
 });
@@ -15,8 +15,7 @@ locationsRouter.get('/', async (req, res) => {
 locationsRouter.get('/:id', async (req, res) => {
     const connection = mysqlDb.getConnection();
     const query = await connection.query('SELECT * FROM locations WHERE id = ?', [req.params.id]);
-    const locations = query[0] as ApiLocation[]
-    const location = locations[0]
+    const [location] = query[0] as ApiLocation[]
     if (!location) {
         return res.status(404).send({error: 'Not found'})
     }
