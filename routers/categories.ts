@@ -7,7 +7,7 @@ const categoriesRouter = Router();
 
 categoriesRouter.get('/', async (req, res) => {
     const connection = mysqlDb.getConnection();
-    const query = await connection.query('SELECT * FROM categories');
+    const query = await connection.query('SELECT id, title FROM categories');
     const categories = query[0] as ApiCategory[]
     res.send(categories);
 });
@@ -15,8 +15,7 @@ categoriesRouter.get('/', async (req, res) => {
 categoriesRouter.get('/:id', async (req, res) => {
     const connection = mysqlDb.getConnection();
     const query = await connection.query('SELECT * FROM categories WHERE id = ?', [req.params.id]);
-    const categories = query[0] as ApiCategory[]
-    const category = categories[0]
+    const [category] = query[0] as ApiCategory[]
     if (!category) {
         return res.status(404).send({error: 'Not found'})
     }
