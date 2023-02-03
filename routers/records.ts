@@ -64,4 +64,41 @@ recordsRouter.delete("/:id", async (req, res) => {
   res.send({ message: "Deleted" });
 });
 
+recordsRouter.put("/:id", imageUpload.single("image"), async (req, res) => {
+  if (!req.body.title || !req.body.category_id || !req.body.location_id) {
+    return res.status(404).send({
+      error: 'Fields "Title", "Category_id" and "Location_id" are required',
+    });
+  }
+  const recordData: Record = {
+    title: req.body.title,
+    category_id: req.body.category_id,
+    location_id: req.body.location_id,
+    description: req.body.description,
+    image: req.file ? req.file.filename : null,
+  };
+
+  const connection = mysqlDb.getConnection();
+  await connection.query(
+    `UPDATE records SET title = ?, category_id = ?, location_id = ?, description = ?${
+      recordData.image ? ", image = ?" : ""
+    } WHERE id = ?`,
+    [
+      recordData.title,
+      recordData.category_id,
+      recordData.location_id,
+      recordData.description,
+      recordData.image,
+      req.params.id,
+    ].filter((value) => value !== null)
+  );
+
+  const { image, ...recordDataWithoutImage } = recordData;
+  if (recordData.image) {
+    res.send({ id: req.params.id, ...recordData });
+  } else {
+    res.send({ id: req.params.id, ...recordDataWithoutImage });
+  }
+});
+
 export default recordsRouter;
