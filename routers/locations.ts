@@ -60,4 +60,23 @@ locationsRouter.delete("/:id", async (req, res) => {
   res.send({ message: "Deleted" });
 });
 
+locationsRouter.put("/:id", async (req, res) => {
+  if (!req.body.title) {
+    return res.status(404).send({ error: 'Field "Title" is required' });
+  }
+
+  const locationData: Location = {
+    title: req.body.title,
+    description: req.body.description,
+  };
+
+  const connection = mysqlDb.getConnection();
+  await connection.query(
+    "UPDATE locations SET title = ?, description = ? WHERE id = ?",
+    [locationData.title, locationData.description, req.params.id]
+  );
+
+  res.send({ id: req.params.id, ...locationData });
+});
+
 export default locationsRouter;
