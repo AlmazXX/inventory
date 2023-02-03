@@ -22,9 +22,9 @@ export interface Record {
   location_id: number;
   description: string;
   image: string | null;
-  registered_at: Date;
 }
 
 export interface ApiRecord extends Record {
   id: number;
+  registered_at: string;
 }
