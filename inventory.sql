@@ -6,7 +6,7 @@ CREATE TABLE inventory.categories
     title       varchar(200) not null,
     description text         not null,
     constraint categories_pk
-            primary key (id)
+        primary key (id)
 );
 
 CREATE TABLE inventory.locations
@@ -15,18 +15,18 @@ CREATE TABLE inventory.locations
     title       varchar(200) not null,
     description text         not null,
     constraint locations_pk
-            primary key (id)
+        primary key (id)
 );
 
 CREATE TABLE inventory.records
 (
     id            int auto_increment,
-    category_id   int          not null,
-    location_id   int          not null,
-    title         varchar(200) not null,
-    description   text         not null,
-    image         varchar(100) null,
-    registered_at datetime     not null,
+    category_id   int                    not null,
+    location_id   int                    not null,
+    title         varchar(200)           not null,
+    description   text                   not null,
+    image         varchar(100)           null,
+    registered_at datetime default NOW() not null,
     constraint records_pk
         primary key (id),
     constraint records_categories_id_fk
@@ -35,8 +35,14 @@ CREATE TABLE inventory.records
         foreign key (location_id) references locations (id)
 );
 
-INSERT INTO inventory.categories (title, description) VALUES ('Furniture', 'Office furniture'), ('Computer equipment', 'Laptops and supplies');
+INSERT INTO inventory.categories (title, description)
+VALUES ('Furniture', 'Office furniture'),
+       ('Computer equipment', 'Laptops and supplies');
 
-INSERT INTO inventory.locations (title, description) VALUES ('Development', 'Developers room'), ('Product Development', 'PMs room');
+INSERT INTO inventory.locations (title, description)
+VALUES ('Development', 'Developers room'),
+       ('Product Development', 'PMs room');
 
-INSERT INTO inventory.records (category_id, location_id, title, description, registered_at) VALUES (1, 1, 'Chair', 'Chair for developers room', '2023-01-01 15:00:00'), (2, 2, 'MacBook', 'MacBook for PMs room', '2023-01-01 15:10:00');
+INSERT INTO inventory.records (category_id, location_id, title, description, registered_at)
+VALUES (1, 1, 'Chair', 'Chair for developers room', '2023-01-01 15:00:00'),
+       (2, 2, 'MacBook', 'MacBook for PMs room', '2023-01-01 15:10:00');
