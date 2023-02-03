@@ -57,7 +57,7 @@ locationsRouter.delete("/:id", async (req, res) => {
     return res.status(404).send({ error: "Cannot delete a parent row " });
   }
   await connection.query("DELETE FROM locations WHERE id = ?", [req.params.id]);
-  res.send("The location is deleted");
+  res.send({ message: "Deleted" });
 });
 
 export default locationsRouter;
