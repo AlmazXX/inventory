@@ -63,4 +63,23 @@ categoriesRouter.delete("/:id", async (req, res) => {
   res.send({ message: "Deleted" });
 });
 
+categoriesRouter.put("/:id", async (req, res) => {
+  if (!req.body.title) {
+    return res.status(404).send({ error: 'Field "Title" is required' });
+  }
+
+  const categoryData: Category = {
+    title: req.body.title,
+    description: req.body.description,
+  };
+
+  const connection = mysqlDb.getConnection();
+  await connection.query(
+    "UPDATE categories SET title = ?, description = ? WHERE id = ?",
+    [categoryData.title, categoryData.description, req.params.id]
+  );
+
+  res.send({ id: req.params.id, ...categoryData });
+});
+
 export default categoriesRouter;
