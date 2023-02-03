@@ -30,11 +30,9 @@ recordsRouter.get("/:id", async (req, res) => {
 
 recordsRouter.post("/", imageUpload.single("image"), async (req, res) => {
   if (!req.body.title || !req.body.category_id || !req.body.location_id) {
-    return res
-      .status(404)
-      .send({
-        error: 'Fields "Title", "Category_id" and "Location_id" are required',
-      });
+    return res.status(404).send({
+      error: 'Fields "Title", "Category_id" and "Location_id" are required',
+    });
   }
   const recordData: Record = {
     title: req.body.title,
@@ -42,7 +40,6 @@ recordsRouter.post("/", imageUpload.single("image"), async (req, res) => {
     location_id: req.body.location_id,
     description: req.body.description,
     image: req.file ? req.file.filename : null,
-    registered_at: new Date(),
   };
 
   const connection = mysqlDb.getConnection();
@@ -54,7 +51,6 @@ recordsRouter.post("/", imageUpload.single("image"), async (req, res) => {
       recordData.location_id,
       recordData.description,
       recordData.image,
-      recordData.registered_at,
     ]
   );
   const info = query[0] as OkPacket;
@@ -65,7 +61,7 @@ recordsRouter.post("/", imageUpload.single("image"), async (req, res) => {
 recordsRouter.delete("/:id", async (req, res) => {
   const connection = mysqlDb.getConnection();
   await connection.query("DELETE FROM records WHERE id = ?", [req.params.id]);
-  res.send("The record was deleted");
+  res.send({ message: "Deleted" });
 });
 
 export default recordsRouter;
