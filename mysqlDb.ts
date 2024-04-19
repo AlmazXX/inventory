@@ -1,10 +1,10 @@
-import mysql, { Connection } from "mysql2/promise";
-import config from "./config";
+import mysql, {Connection} from "mysql2/promise";
+import {db} from "./config";
 
 let connection: Connection | null = null;
 const mysqlDb = {
   async init() {
-    connection = await mysql.createConnection(config.db);
+    connection = await mysql.createConnection(db);
   },
   getConnection(): Connection {
     if (!connection) throw new Error("Connection failed");

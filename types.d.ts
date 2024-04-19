@@ -1,3 +1,15 @@
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      EXPRESS_PORT: number;
+      MYSQL_HOST: string;
+      MYSQL_USER: string;
+      MYSQL_PASSWORD: string;
+      MYSQL_DATABASE: string;
+    }
+  }
+}
+
 export interface Category {
   title: string;
   description: string;
